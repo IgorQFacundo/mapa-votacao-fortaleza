@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>try{document.documentElement.dataset.theme=localStorage.getItem('tema')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){document.documentElement.dataset.theme='light'}</script>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('tema')||'dark'}catch(e){document.documentElement.dataset.theme='dark'}</script>
 <style>
 :root{--laranja:#F15A22;--verde:#009889;--azul:#00A0DC;--creme:#FFE6CB;--petroleo:#325565;--grafite:#414042;--bg:#FFFFFF;--surface:#FFFFFF;--soft:#F6F7F8;--line:#E3E6E9;--mut:#66727C;--ink:#325565;--text:#414042;--hl:#FFE6CB;--shadow:var(--shadow);--barmut:#B8C2C9;--on-bg:#325565;--on-fg:#FFFFFF;--halo:#FFFFFF;--acc-txt:#BD4418;--acc-bg:#C4471A;color-scheme:light}
 :root[data-theme="dark"]{--bg:#0E171F;--surface:#15212B;--soft:#1B2833;--line:#2C3C49;--mut:#A7B4BE;--ink:#EEF4F7;--text:#D7E0E6;--hl:rgba(241,90,34,.2);--shadow:rgba(0,0,0,.5);--barmut:#5A6974;--on-bg:#EEF4F7;--on-fg:#0E171F;--halo:#0E171F;--acc-txt:#FF8A5C;--acc-bg:#C4471A;color-scheme:dark}

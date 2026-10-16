@@ -164,15 +164,6 @@ ul{list-style:none}
 .lab.grp b{color:var(--acc-txt)}
 .legend .it{cursor:pointer;border-radius:4px;padding:0 4px;margin:0 -4px}
 .legend .it:hover{background:var(--hl)}
-.evo{display:block;width:100%;margin-top:14px;padding:12px 14px;border:0;border-radius:8px;cursor:pointer;text-align:left;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(110deg,#14594a,#7d5a06 55%,#a83a14);box-shadow:0 4px 14px rgba(0,0,0,.25)}
-.evo small{display:block;font-size:11px;font-weight:600;opacity:.92;margin-top:2px}
-.evo:hover{filter:brightness(1.08)}
-.evomodal{position:fixed;inset:0;z-index:5000;background:rgba(5,9,13,.82);display:flex;align-items:center;justify-content:center;padding:16px}
-.evobox{position:relative;width:min(92vh,100%,760px);background:#0b1218;border:1px solid #2c3c49;border-radius:10px;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.evobox video{display:block;width:100%;height:auto;border-radius:6px;background:#000}
-.evobox .x{position:absolute;top:-14px;right:-14px;width:32px;height:32px;border-radius:50%;border:1px solid #2c3c49;background:#15212b;color:#fff;font-size:20px;cursor:pointer;line-height:1}
-.evoacts{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-.evoacts .pill{text-decoration:none}
 </style></head>
 <body><div id="wrap">
 <div id="side">
@@ -186,7 +177,6 @@ ul{list-style:none}
 <nav class="crumbs" id="crumbs"></nav>
 <h1 id="headline"></h1>
 <div id="subline"></div>
-<button class="evo" id="evoBtn" hidden onclick="abreEvo()">▶ Evolução 2018 → 2022 → 2026<small>mapa de calor dos votos do Idilvan no Ceará</small></button>
 <div class="kpi"><div class="n" id="kn"></div><div class="l" id="kl"></div><div class="tags" id="tags"></div><div class="stats" id="stats"></div></div>
 <div class="cmpbox" id="cmpbox"></div>
 <div class="toggle" id="mtog"><button id="mV" class="on" onclick="setMetric('v')">Votos</button><button id="mP" onclick="setMetric('p')">% dos válidos</button></div>
@@ -195,7 +185,6 @@ ul{list-style:none}
 <h2 id="t2"></h2><ul id="l2" class="bl"></ul>
 <div class="foot" id="foot"></div>
 </div></div>
-<div class="evomodal" id="evo" hidden onclick="if(event.target===this)fechaEvo()"><div class="evobox"><button class="x" onclick="fechaEvo()" title="Fechar">×</button><video id="evoVid" playsinline muted loop preload="none" controls poster="idilvan_2018_2026.jpg?v=3"><source src="idilvan_2018_2026.mp4?v=3" type="video/mp4"></video><div class="evoacts"><a class="pill" href="idilvan_2018_2026.mp4?v=3" download>Baixar vídeo (MP4)</a><a class="pill sec" href="idilvan_2018_2026.gif?v=3" download>Baixar GIF</a></div></div></div>
 <div id="map"><div id="overlay"><div class="overrow"><button class="pill" id="back" hidden onclick="voltar()">← Voltar</button><div class="ctitle" id="ctitle" hidden></div></div><div id="card" hidden></div></div><div class="author"><b>por Igor Facundo</b><span>Análise · out 2026</span></div></div></div>
 <script>
 const ESCOPO='ce';
@@ -403,14 +392,12 @@ const stat=(n,l)=>`<div><b>${n}</b><span>${l}</span></div>`;
 const statB=(n,l,fn,on,tit)=>`<button class="${on?'on':''}" onclick="${fn}" title="${tit||''}"><b>${n}</b><span>${l}</span></button>`;
 const crumb=(txt,fn)=>fn?`<a href="#" onclick="${fn};return false">${esc(txt)}</a>`:`<span>${esc(txt)}</span>`;
 M.total0=()=>M.total;CANDS.forEach(c=>c.total0=()=>CE?c.total:c.forTotal);
-function abreEvo(){$('evo').hidden=false;const v=$('evoVid');v.currentTime=0;v.play().catch(()=>{});}
-function fechaEvo(){$('evo').hidden=true;$('evoVid').pause();}
 function chips(){$('chips').innerHTML=CANDS.map((c,i)=>`<button class="chip${i===ci?' on':''}" onclick="setCand(${i})">${esc(c.urna)}<small>${cargoTxt(c)}</small></button>`).join('');}
 function boxComparativo(titulo,vs,vF,vE){$('cmpbox').innerHTML=`<div class="t">${titulo}</div>`+`<div class="cmp clic">${CANDS.map((c,i)=>{const va=c.cargo==='fed'?vF:vE;const mx=Math.max(1,...CANDS.map((d,j)=>vs[j]/(((d.cargo==='fed'?vF:vE))||1)));const r=va?vs[i]/va:0;
   return `<div class="${i===ci?'me':''}" onclick="setCand(${i})" title="Ver ${esc(c.urna)}"><span>${esc(c.urna)}</span><span class="bar"><i style="width:${r/mx*100}%"></i></span><b>${fmt(vs[i])}</b><em>${pct(vs[i],va)}</em></div>`;}).join('')}</div><div class="gl2">% = votos ÷ válidos do cargo de cada um (federal ou estadual)</div>`;}
 function somaVs(fs){return[[0,1,2,3].map(i=>fs.reduce((s,p)=>s+p.vs[i],0)),fs.reduce((s,p)=>s+p.valF,0),fs.reduce((s,p)=>s+p.valE,0)];}
 
-function renderSide(){itensL=[];chips();$('evoBtn').hidden=M.key!=='Idilvan';const U=FC.features.map(f=>f.properties),tot=M.total0();
+function renderSide(){itensL=[];chips();const U=FC.features.map(f=>f.properties),tot=M.total0();
   $('tabCE').classList.toggle('on',CE);$('tabFOR').classList.toggle('on',!CE);
   $('back').hidden=!(nivel==='drill'||(nivel==='top'&&reg));
   $('subV').hidden=!(nivel==='top'&&!reg);$('v1').classList.toggle('on',vista===W.v1[0]);$('v2').classList.toggle('on',vista===W.v2[0]);
@@ -509,7 +496,7 @@ $('q').addEventListener('change',e=>{const v=e.target.value.trim().toLowerCase()
   if(n&&(v!==vb||!SC.ce.nomesU.some(x=>x.toLowerCase()===v))){if(CE)setEscopo('for');entrarUni(n);}
   else{n=SC.ce.nomesU.find(x=>x.toLowerCase()===v);if(n){if(!CE)setEscopo('ce');clicaUni(n);}}
   if(n){e.target.value='';e.target.blur();}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('evo').hidden)fechaEvo();else if(emDest())sairDest();else if(sel)unpin();else if(nivel!=='top'||reg)voltar();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(emDest())sairDest();else if(sel)unpin();else if(nivel!=='top'||reg)voltar();}});
 $('foot').innerHTML=`Fonte: TSE, votação por seção e locais de votação, Eleições 2026, 1º turno (dados abertos). % dos válidos = votos do candidato ÷ votos válidos (nominais + legenda) do cargo dele: Idilvan e Larissa concorreram a Dep. Federal; Adriana e Eliana, a Dep. Estadual. Posição = colocação entre todos os candidatos do mesmo cargo naquele lugar. Regiões: 14 regiões de planejamento do Ceará (Lei Complementar estadual nº 154/2015). Localidades das cidades conforme o cadastro de locais de votação do TSE. Bairros de Fortaleza pelo endereço de cada local de votação no TSE, agrupados nos 6 Distritos de Educação.`;
 
 (function init(){const h=new URLSearchParams(location.hash.slice(1));
